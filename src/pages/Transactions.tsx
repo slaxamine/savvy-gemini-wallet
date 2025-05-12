@@ -21,8 +21,8 @@ const Transactions = () => {
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("");
-  const [typeFilter, setTypeFilter] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState<string | null>(null);
   
@@ -56,10 +56,10 @@ const Transactions = () => {
       transaction.amount.toString().includes(searchTerm);
     
     // Category filter
-    const matchesCategory = categoryFilter === "" || transaction.category === categoryFilter;
+    const matchesCategory = categoryFilter === "all" || transaction.category === categoryFilter;
     
     // Type filter
-    const matchesType = typeFilter === "" || transaction.type === typeFilter;
+    const matchesType = typeFilter === "all" || transaction.type === typeFilter;
     
     return matchesSearch && matchesCategory && matchesType;
   });
@@ -85,11 +85,11 @@ const Transactions = () => {
           <SelectTrigger className="w-full md:w-[180px]">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4" />
-              <span>{categoryFilter ? "Category" : "All Categories"}</span>
+              <span>{categoryFilter === "all" ? "All Categories" : "Category"}</span>
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Categories</SelectItem>
+            <SelectItem value="all">All Categories</SelectItem>
             {categories.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 {category.name}
@@ -102,11 +102,11 @@ const Transactions = () => {
           <SelectTrigger className="w-full md:w-[180px]">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4" />
-              <span>{typeFilter ? (typeFilter === "expense" ? "Expenses" : "Income") : "All Types"}</span>
+              <span>{typeFilter === "all" ? "All Types" : (typeFilter === "expense" ? "Expenses" : "Income")}</span>
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Types</SelectItem>
+            <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="expense">Expenses</SelectItem>
             <SelectItem value="income">Income</SelectItem>
           </SelectContent>
